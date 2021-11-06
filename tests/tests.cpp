@@ -4,7 +4,7 @@
 
 #include <gtest/gtest.h>
 
-#include <example.hpp>
+#include <sharedptr.hpp>
 
 TEST(Example, EmptyTest) {
     EXPECT_THROW(example(), std::runtime_error);

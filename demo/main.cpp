@@ -1,4 +1,4 @@
-#include <example.hpp>
+#include <sharedptr.hpp>
 
 int main() {
   example();
