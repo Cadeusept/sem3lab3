@@ -11,103 +11,118 @@ template <typename T>
 class SharedPtr {
 public:
  SharedPtr() {
-      this->_ptr = nullptr;
-      this->_count = new int(0);
+      _ptr = nullptr;
+      _count = nullptr;
     }
 
     SharedPtr(T* ptr) {
-      this->_ptr = ptr;
-      this->_count = new int(1);
+      _ptr = ptr;
+      _count = new std::atomic<std::uint64_t>(1);
     }
 
     SharedPtr(const SharedPtr& r) {
-      this->_ptr = r._ptr;
-      this->_count = r._count;
-      *this->_count++;
+      if (r._ptr != nullptr) {
+        _ptr = r._ptr;
+        _count = r._count;
+        *_count++;
+      } else {
+        _ptr = nullptr;
+        _count = nullptr;
+      }
+
     }
 
     SharedPtr(SharedPtr&& r) {
-      this->_ptr = *r._ptr;
-      this->_count = *r._count;
-      *this->count++;
+      _ptr = r._ptr;
+      _count = r._count;
+
+      r.clear();
     }
 
     ~SharedPtr() {
-      *this->_count--;
-      if ((*_count == 0) && this) {
-        delete this->_ptr;
-        delete this->_count;
-      }
+      clear();
     }
 
     auto operator=(const SharedPtr& r) -> SharedPtr& {
+      clear();
       _ptr = r._ptr;
       _count = r._count;
+
+      if (r._ptr != nullptr) {
+        *_count++;
+      }
+
+      return *this;
     }
 
     auto operator=(SharedPtr&& r) -> SharedPtr& {
-      _ptr = *r._ptr;
-      _count = *r._count;
+      clear();
+      _ptr = r._ptr;
+      _count = r._count;
+
+      if (r._ptr != nullptr) {
+        *_count++;
+      }
+
+      r.clear();
+      return *this;
     }
 
     // проверяет, указывает ли указатель на объект
     operator bool() const {
-      if (this->_ptr == nullptr)
-        return false;
-      else
-        return true;
+      return (_ptr != nullptr);
     }
 
     auto operator*() const -> T& {
-      return *this->_ptr;
+      return *_ptr;
     }
 
     auto operator->() const -> T* {
-      return this->_count;
+      return _count;
     }
 
     auto get() -> T* {
-      return this->_ptr;
+      return _ptr;
     }
 
-
-
     void reset() {
-      *this->_count--;
-      if (this->use_count() == 0) {
-        delete this->_ptr;
-        delete this->_count;
-      }
-
-      this->_ptr = nullptr;
-      this->_count = nullptr;
+      clear();
     }
 
     void reset(T* ptr) {
-      this->_ptr = ptr;
-      *this->_count--;
-      *this->_count = 1;
+      clear();
+
+      _ptr=ptr;
+      _count = new std::atomic<std::uint64_t>(1);
     }
 
     void swap(SharedPtr& r) {
-      T* tmp_ptr = r._ptr;
-      std::atomic<std::uint64_t>* tmp_count = r._count;
-
-      r = this;
-
-      this->_ptr = tmp_ptr;
-      this->_count = tmp_count;
+      std::swap(_ptr,r._ptr);
+      std::swap(_count,r._count);
     }
 
     // возвращает количество объектов SharedPtr,
     // которые ссылаются на тот же управляемый объект
     auto use_count() const -> size_t {
-      return static_cast<size_t>(*_count);
+      if (!this)
+        return static_cast<size_t>(*_count);
+      else
+        return 0;
     }
 
 private:
     T* _ptr;
     std::atomic<std::uint64_t>* _count;
+
+    void clear() {
+      if (_count != nullptr) {
+        *_count--;
+        if ((*_count == 0) && this) {
+          delete _ptr;
+          delete _count;
+        }
+      }
+    }
 };
 
 #endif // INCLUDE_SHAREDPTR_HPP_
