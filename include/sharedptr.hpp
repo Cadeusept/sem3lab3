@@ -24,7 +24,7 @@ public:
       if (!r) {
         _ptr = r._ptr;
         _count = r._count;
-        *_count++;
+        (*_count)++;
       } else {
         _ptr = nullptr;
         _count = nullptr;
@@ -49,7 +49,7 @@ public:
       _count = r._count;
 
       if (!r) {
-        *_count++;
+        (*_count)++;
       }
 
       return *this;
@@ -61,7 +61,7 @@ public:
       _count = r._count;
 
       if (!r) {
-        *_count++;
+        (*_count)++;
       }
 
       r.clear();
@@ -116,7 +116,7 @@ private:
 
     void clear() {
       if (this) {
-        *_count--;
+        (*_count)--;
         if ((*_count <= 0) && this) {
           delete _ptr;
           delete _count;
