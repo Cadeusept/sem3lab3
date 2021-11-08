@@ -10,7 +10,8 @@
 template <typename T>
 class SharedPtr {
 public:
-    SharedPtr() {
+
+ SharedPtr() {
       this->_ptr = nullptr;
       this->_count = new int(0);
     }
@@ -21,16 +22,17 @@ public:
     }
 
     SharedPtr(const SharedPtr& r) {
-      this->_ptr = r.ptr;
-      this->_count = r.use_count();
+      this->_ptr = r._ptr;
+      this->_count = r._count;
       *this->_count++;
     }
 
     SharedPtr(SharedPtr&& r) {
-      this->_ptr = *r.get();
-      this->_count = *r.use_count();
+      this->_ptr = *r._ptr;
+      this->_count = *r._count;
       *this->count++;
     }
+
     ~SharedPtr() {
       *this->_count--;
       if ((*_count == 0) && this) {
@@ -40,13 +42,13 @@ public:
     }
 
     auto operator=(const SharedPtr& r) -> SharedPtr& {
-      _ptr=r.get();
-      *_count=r.use_count();
+      _ptr=r._ptr;
+      _count=r._count;
     }
 
     auto operator=(SharedPtr&& r) -> SharedPtr& {
-      _ptr=*r.get();
-      *_count=*r.use_count();
+      _ptr=*r._ptr;
+      _count=*r._count;
     }
 
     // проверяет, указывает ли указатель на объект
@@ -62,7 +64,7 @@ public:
     }
 
     auto operator->() const -> T* {
-      return this->_ptr;
+      return this->_count;
     }
 
     auto get() -> T* {
@@ -89,13 +91,13 @@ public:
     }
 
     void swap(SharedPtr& r) {
-      T* tmp_ptr = r.get();
-      std::atomic<std::uint64_t> tmp_count = r.use_count();
+      T* tmp_ptr = r._ptr;
+      std::atomic<std::uint64_t>* tmp_count = r._count;
 
       r = this;
 
       this->_ptr = tmp_ptr;
-      *this->_count = tmp_count;
+      this->_count = tmp_count;
     }
 
     // возвращает количество объектов SharedPtr, которые ссылаются на тот же управляемый объект
