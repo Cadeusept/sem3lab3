@@ -115,7 +115,7 @@ private:
     std::atomic<std::uint64_t>* _count;
 
     void clear() {
-      if (!this) {
+      if (this) {
         *_count--;
         if ((*_count <= 0) && this) {
           delete _ptr;
