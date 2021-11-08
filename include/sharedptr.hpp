@@ -27,6 +27,10 @@ public:
     void swap(SharedPtr& r);
     // возвращает количество объектов SharedPtr, которые ссылаются на тот же управляемый объект
     auto use_count() const -> size_t;
+
+private:
+    T* _ptr;
+    static size_t _count;
 };
 
 #endif // INCLUDE_SHAREDPTR_HPP_
