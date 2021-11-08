@@ -1,5 +1,6 @@
 #include <sharedptr.hpp>
 
 int main() {
-  example();
+  //example();
+  return 0;
 }

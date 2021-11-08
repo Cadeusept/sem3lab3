@@ -10,7 +10,6 @@
 template <typename T>
 class SharedPtr {
 public:
-
  SharedPtr() {
       this->_ptr = nullptr;
       this->_count = new int(0);
@@ -42,13 +41,13 @@ public:
     }
 
     auto operator=(const SharedPtr& r) -> SharedPtr& {
-      _ptr=r._ptr;
-      _count=r._count;
+      _ptr = r._ptr;
+      _count = r._count;
     }
 
     auto operator=(SharedPtr&& r) -> SharedPtr& {
-      _ptr=*r._ptr;
-      _count=*r._count;
+      _ptr = *r._ptr;
+      _count = *r._count;
     }
 
     // проверяет, указывает ли указатель на объект
@@ -100,9 +99,10 @@ public:
       this->_count = tmp_count;
     }
 
-    // возвращает количество объектов SharedPtr, которые ссылаются на тот же управляемый объект
+    // возвращает количество объектов SharedPtr,
+    // которые ссылаются на тот же управляемый объект
     auto use_count() const -> size_t {
-      return (size_t)(*_count);
+      return static_cast<size_t>(*_count);
     }
 
 private:
