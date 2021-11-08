@@ -21,7 +21,7 @@ public:
     }
 
     SharedPtr(const SharedPtr& r) {
-      if (r._ptr != nullptr) {
+      if (!r) {
         _ptr = r._ptr;
         _count = r._count;
         *_count++;
@@ -48,7 +48,7 @@ public:
       _ptr = r._ptr;
       _count = r._count;
 
-      if (r._ptr != nullptr) {
+      if (!r) {
         *_count++;
       }
 
@@ -60,7 +60,7 @@ public:
       _ptr = r._ptr;
       _count = r._count;
 
-      if (r._ptr != nullptr) {
+      if (!r) {
         *_count++;
       }
 
@@ -115,9 +115,9 @@ private:
     std::atomic<std::uint64_t>* _count;
 
     void clear() {
-      if (_count != nullptr) {
+      if (!this) {
         *_count--;
-        if ((*_count == 0) && this) {
+        if ((*_count <= 0) && this) {
           delete _ptr;
           delete _count;
         }
