@@ -85,6 +85,9 @@ public:
 
     void reset() {
       clear();
+
+      _ptr = nullptr;
+      _count = nullptr;
     }
 
     void reset(T* ptr) {
@@ -120,8 +123,6 @@ private:
           delete _count;
         }
       }
-      _ptr = nullptr;
-      _count = nullptr;
     }
 };
 
