@@ -21,22 +21,19 @@ public:
     }
 
     SharedPtr(const SharedPtr& r) {
-      if (!r) {
-        _ptr = r._ptr;
-        _count = r._count;
+      _ptr = r._ptr;
+      _count = r._count;
+      if (!this) {
         (*_count)++;
-      } else {
-        _ptr = nullptr;
-        _count = nullptr;
       }
-
     }
 
     SharedPtr(SharedPtr&& r) {
       _ptr = r._ptr;
       _count = r._count;
 
-      r.clear();
+      r._ptr = nullptr;
+      r._count = nullptr;
     }
 
     ~SharedPtr() {
@@ -64,13 +61,14 @@ public:
         (*_count)++;
       }
 
-      r.clear();
+      r._ptr = nullptr;
+      r._count = nullptr;
       return *this;
     }
 
     // проверяет, указывает ли указатель на объект
     operator bool() const {
-      return (_ptr != nullptr);
+      return _ptr != nullptr;
     }
 
     auto operator*() const -> T& {
@@ -78,7 +76,7 @@ public:
     }
 
     auto operator->() const -> T* {
-      return _count;
+      return _ptr;
     }
 
     auto get() -> T* {
