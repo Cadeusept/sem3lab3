@@ -1,4 +1,4 @@
-// Copyright 2021 Your Name <your_email>
+//Copyright 2021 Matthew abobus1488822@yandex.ru
 
 #include <stdexcept>
 
