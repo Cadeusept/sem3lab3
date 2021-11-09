@@ -120,6 +120,8 @@ private:
           delete _count;
         }
       }
+      _ptr = nullptr;
+      _count = nullptr;
     }
 };
 
