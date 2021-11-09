@@ -48,8 +48,6 @@ TEST(Equality, Operator_methods) {
   EXPECT_EQ(sp2.use_count(), 3);
 
   EXPECT_EQ(*(sp3),5);
-  //TODO: сделать проверку стрелачки
-  //EXPECT_EQ(sp3->use_count(),5);
   EXPECT_EQ(bool(sp3),true);
 
   SharedPtr<int> sp4;
