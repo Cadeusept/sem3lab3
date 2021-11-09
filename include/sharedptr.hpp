@@ -10,7 +10,7 @@
 template <typename T>
 class SharedPtr {
 public:
- SharedPtr() {
+    SharedPtr() {
       _ptr = nullptr;
       _count = nullptr;
     }
@@ -49,7 +49,7 @@ public:
         (*_count)++;
       }
 
-      return *_ptr != nullptr;
+      return *_ptr;
     }
 
     auto operator=(SharedPtr&& r) -> SharedPtr& {
@@ -63,7 +63,7 @@ public:
 
       r._ptr = nullptr;
       r._count = nullptr;
-      return *_ptr != nullptr;
+      return *_ptr;
     }
 
     // проверяет, указывает ли указатель на объект
@@ -115,7 +115,7 @@ private:
     void clear() {
       if (_ptr != nullptr) {
         (*_count)--;
-        if ((*_count <= 0) && (_ptr != nullptr)) {
+        if (((*_count) <= 0) && (_ptr != nullptr)) {
           delete _ptr;
           delete _count;
         }
