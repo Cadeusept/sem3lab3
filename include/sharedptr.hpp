@@ -23,7 +23,7 @@ public:
     SharedPtr(const SharedPtr& r) {
       _ptr = r._ptr;
       _count = r._count;
-      if (!this) {
+      if (_ptr != nullptr) {
         (*_count)++;
       }
     }
@@ -45,11 +45,11 @@ public:
       _ptr = r._ptr;
       _count = r._count;
 
-      if (!r) {
+      if (r._ptr != nullptr) {
         (*_count)++;
       }
 
-      return *this;
+      return *_ptr != nullptr;
     }
 
     auto operator=(SharedPtr&& r) -> SharedPtr& {
@@ -57,13 +57,13 @@ public:
       _ptr = r._ptr;
       _count = r._count;
 
-      if (!r) {
+      if (r._ptr != nullptr) {
         (*_count)++;
       }
 
       r._ptr = nullptr;
       r._count = nullptr;
-      return *this;
+      return *_ptr != nullptr;
     }
 
     // проверяет, указывает ли указатель на объект
@@ -102,7 +102,7 @@ public:
     // возвращает количество объектов SharedPtr,
     // которые ссылаются на тот же управляемый объект
     auto use_count() const -> size_t {
-      if (!this)
+      if (_ptr != nullptr)
         return static_cast<size_t>(*_count);
       else
         return 0;
@@ -113,9 +113,9 @@ private:
     std::atomic<std::uint64_t>* _count;
 
     void clear() {
-      if (this) {
+      if (_ptr != nullptr) {
         (*_count)--;
-        if ((*_count <= 0) && this) {
+        if ((*_count <= 0) && (_ptr != nullptr)) {
           delete _ptr;
           delete _count;
         }

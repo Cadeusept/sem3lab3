@@ -31,7 +31,6 @@ string(APPEND CMAKE_CXX_FLAGS " -Wshadow -Wnon-virtual-dtor")
 find_package(GTest CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
-  # enum your files and delete this comment
         ${CMAKE_CURRENT_SOURCE_DIR}/sources/sharedptr.cpp
 )
 
